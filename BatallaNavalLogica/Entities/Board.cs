@@ -10,7 +10,7 @@ namespace BatallaNavalLogica.Entities
         public int rows { get; set; }
         private List<Ship> ships { get; set; }
         /* Lista de barcos que pertenecen al barco */
-        public bool[,] board { get; set; }
+        public char[,] board { get; set; }
         /* board guarda cada ubicación, guardando si cada celda está ocupada o no por un barco */
         public List<Ship> GetShips() => ships;
 
@@ -23,7 +23,7 @@ namespace BatallaNavalLogica.Entities
             this.cols = cols;
             this.rows = rows;
             ships = new List<Ship>();
-            board = new bool[cols, rows];
+            board = new char[cols, rows];
             set0();
         }
         public void set0()
@@ -32,7 +32,7 @@ namespace BatallaNavalLogica.Entities
             {
                 for (int i = 0; i < cols; i++)
                 {
-                    board[i, j] = false;
+                    board[i, j] = ' ';
                 }
             }
         }
@@ -50,10 +50,10 @@ namespace BatallaNavalLogica.Entities
 
                 int offset = 0;
                 if (s.y + s.size > rows) offset = s.y + s.size - rows;
-
+                s.y -= offset;
                 for (int i = 0; i < s.size; i++)
                 {
-                    board[s.x, s.y + i - offset] = true;
+                    board[s.x, s.y + i] = 'X';
                 }
             }
             else
@@ -61,9 +61,10 @@ namespace BatallaNavalLogica.Entities
                 int offset = 0;
                 if (s.x + s.size > cols) offset = s.x + s.size - cols;
                 /* Igual que el caso vertical */
+                s.x -= offset;
                 for (int i = 0; i < s.size; i++)
                 {
-                    board[s.x + i - offset, s.y] = true;
+                    board[s.x + i, s.y] = 'X';
                 }
             }
             ships.Add(s);
@@ -71,6 +72,20 @@ namespace BatallaNavalLogica.Entities
         public void DestroyShip()
         {
 
+        }
+        public void ShowShips()
+        {
+            char c = 'A';
+            foreach(Ship s in ships)
+            {
+                for(int i = 0; i < s.size; i++)
+                {
+                    if (s.orientation == 1) board[s.x, s.y + i] = c;
+                    else board[s.x + i, s.y] = c;
+                }
+                c++;
+            }
+            Show();
         }
         public void Show()
         {
@@ -80,8 +95,7 @@ namespace BatallaNavalLogica.Entities
                 Console.Write(c++);
                 for(int j = 0; j < cols; j++)
                 {
-                    if (board[j, i]) Console.Write("|X");
-                    else Console.Write("| ");
+                    Console.Write("|" + board[j, i]);
                 }
                 Console.WriteLine("|");
             }
@@ -89,6 +103,16 @@ namespace BatallaNavalLogica.Entities
             for (int i = 0; i < cols; i++)
             {
                 Console.Write($"{i + 1} ");
+            }
+            Console.WriteLine();
+
+            c = 'A';
+            foreach(Ship s in ships)
+            {
+                Console.Write($"{c}: {s.x}-{s.y}. size: {s.size} ");
+                if (s.orientation == 1) Console.WriteLine("Vertical");
+                else Console.WriteLine("Horizontal");
+                c++;
             }
         }
     }

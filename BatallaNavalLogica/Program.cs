@@ -7,11 +7,12 @@ namespace BatallaNavalLogica
     {
         static void Main(string[] args)
         {
-            int shipNum = 50, x = 50, y = 30;
+            int shipNum = 5, x = 10, y = 10;
+
             Battleship bs = new Battleship(x, y);
 
             bs.Setup(shipNum);
-            bs.board.Show();
+            bs.board.ShowShips();
         }
     }
 }

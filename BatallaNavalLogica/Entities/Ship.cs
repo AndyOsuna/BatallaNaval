@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 
 namespace BatallaNavalLogica.Entities
@@ -15,10 +16,10 @@ namespace BatallaNavalLogica.Entities
 
         public Ship()
         {
-            this.size = 0;
-            this.x = 0;
-            this.y = 0;
-            this.orientation = 0;
+            size = 0;
+            x = 0;
+            y = 0;
+            orientation = 0;
         }
 
         public Ship(int x, int y, int size, int orientation)
