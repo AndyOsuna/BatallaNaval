@@ -19,40 +19,34 @@ namespace BatallaNavalLogica.Entities
 
             for (int i = 0; i < numShips; i++)
             {
-                Ship s = new Ship();
-                bool x = true;
-                while (x)
-                {
-                    // Ship(x, y, size, orientation)
-                    s = new Ship(r.Next(0, board.cols), r.Next(0, board.rows), r.Next(2, 6), r.Next(2));
-                    x = CheckCollision(s, board.GetShips());
-                }
-                Console.Write($"{i}: {s.x}-{s.y}. size: {s.size} ");
-                if (s.orientation == 1) Console.WriteLine("Vertical");
-                else Console.WriteLine("Horizontal");
-                board.addShip(s);
+                board.addShip();
             }
         }
 
-        public bool CheckCollision(Ship ship, List<Ship> ships)
+        public void ShowThisShips(List<Ship> ships)
         {
-            foreach (Ship s in ships)
+            char[,] tmpBoard = new char[board.cols, board.rows];
+            for (int i = 0; i < board.cols; i++) for (int j = 0; j < board.rows; j++) tmpBoard[i, j] = ' ';
+            char indx = 'a';
+            foreach(Ship s in ships)
             {
-                // TA MAL
                 for (int i = 0; i < s.size; i++)
                 {
-                    for (int j = 0; j < ship.size; j++)
-                    {
-                        if ((s.x + i) == (ship.x + j) && (s.y + i) == (ship.y + j))
-                        {
-                            Console.WriteLine("XD");
-                            return true;
-                        }
-                    }
+                    if(s.orientation==0) tmpBoard[s.x+i, s.y] = indx;
+                    if(s.orientation==1) tmpBoard[s.x, s.y+i] = indx;
                 }
+                indx++;
             }
-
-            return false;
+            Console.Clear();
+            for(int j = 0; j < board.rows; j++)
+            {
+                for(int i = 0; i < board.cols; i++)
+                {
+                    Console.Write($"|{tmpBoard[i, j]}");
+                }
+                Console.WriteLine("|");
+            }
+            Console.ReadLine();
         }
     }
 }

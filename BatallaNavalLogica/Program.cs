@@ -7,7 +7,7 @@ namespace BatallaNavalLogica
     {
         static void Main(string[] args)
         {
-            int shipNum = 5, x = 10, y = 10;
+            int shipNum = 500, x = 100, y = 45;
 
             Battleship bs = new Battleship(x, y);
 

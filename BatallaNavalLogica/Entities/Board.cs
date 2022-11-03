@@ -36,42 +36,101 @@ namespace BatallaNavalLogica.Entities
                 }
             }
         }
-        public void addShip(Ship s)
+        public void addShip()
         {
-            /* Para el caso en el que no quepa el barco en el tablero:
-                * Cuando la coordenada está cerca de un borde del tablero, y por el tamaño sobresale de él.
-                * Lo que hacemos es correrlo hacia adentro, según la orientacion. Para eso utilizamos la variable 'offset'.
-                * Sabemos que sobresale del tablero cuando su coordenada (x ó y) mas el tamaño, 
-                * son mayores al tamaño del tablero en dicha dimensión (x ó y).
-                offset = barco.coordenada + barco.tamaño - tablero. */
+            Random r = new Random();
+            Ship s = new Ship();
+            do
+            {
+                s = new Ship(r.Next(cols), r.Next(rows), r.Next(2, 6), r.Next(2));
 
-            if (s.orientation == 1)
-            {   // 1 = Orientacion Vertical
+                //Console.Write($"{i}: {s.x}-{s.y}. size: {s.size} ");
+                //if (s.orientation == 1) Console.WriteLine("Vertical");
+                //else Console.WriteLine("Horizontal");
 
-                int offset = 0;
-                if (s.y + s.size > rows) offset = s.y + s.size - rows;
-                s.y -= offset;
-                for (int i = 0; i < s.size; i++)
-                {
-                    board[s.x, s.y + i] = 'X';
+                /* Para el caso en el que no quepa el barco en el tablero:
+                    * Cuando la coordenada está cerca de un borde del tablero, y por el tamaño sobresale de él.
+                    * Lo que hacemos es correrlo hacia adentro, según la orientacion. Para eso utilizamos la variable 'offset'.
+                    * Sabemos que sobresale del tablero cuando su coordenada (x ó y) mas el tamaño, 
+                    * son mayores al tamaño del tablero en dicha dimensión (x ó y).
+                    offset = barco.coordenada + barco.tamaño - tablero. */
+
+                if (s.orientation == 1)
+                {   // 1 = Orientacion Vertical
+
+                    int offset = 0;
+                    if (s.y + s.size > rows) offset = s.y + s.size - rows;
+                    s.y -= offset;
+                    /*for (int i = 0; i < s.size; i++)
+                    {
+                        board[s.x, s.y + i] = 'X';
+                    }*/
+                }
+                else
+                {   // 0 = Orientacion Horizontal
+                    int offset = 0;
+                    if (s.x + s.size > cols) offset = s.x + s.size - cols;
+                    /* Igual que el caso vertical */
+                    s.x -= offset;
+                    /*for (int i = 0; i < s.size; i++)
+                    {
+                        board[s.x + i, s.y] = 'X';
+                    }*/
                 }
             }
-            else
-            {   // 0 = Orientacion Horizontal
-                int offset = 0;
-                if (s.x + s.size > cols) offset = s.x + s.size - cols;
-                /* Igual que el caso vertical */
-                s.x -= offset;
-                for (int i = 0; i < s.size; i++)
-                {
-                    board[s.x + i, s.y] = 'X';
-                }
-            }
+            while (CheckSuperposition(s, ships));
             ships.Add(s);
         }
         public void DestroyShip()
         {
 
+        }
+        public bool CheckSuperposition(Ship ship2, List<Ship> ships)
+        {
+            foreach (Ship ship1 in ships)
+            {
+                //List<Ship> xd = new List<Ship>();
+                //xd.Add(s); xd.Add(ship);
+                //ShowThisShips(xd);
+
+                if (ship1.orientation == 1)
+                {
+                    if (ship2.orientation == 1)
+                    {
+                        if (ship1.x == ship2.x &&
+                            ship1.y + ship1.size >= ship2.y &&
+                            ship1.y <= ship2.y + ship2.size)
+                            return true;
+                    }
+                    else
+                    {
+                        if (ship1.x >= ship2.x &&
+                            ship1.x <= ship2.x + ship2.size &&
+                            ship2.y >= ship1.y &&
+                            ship2.y <= ship1.y + ship1.size)
+                            return true;
+                    }
+                }
+                else
+                {
+                    if (ship2.orientation == 1)
+                    {
+                        if (ship2.x >= ship1.x &&
+                            ship2.x <= ship1.x + ship1.size &&
+                            ship1.y >= ship2.y &&
+                            ship1.y <= ship2.y + ship2.size)
+                            return true;
+                    }
+                    else
+                    {
+                        if (ship1.y == ship2.y &&
+                            ship1.x + ship1.size >= ship2.x &&
+                            ship1.x <= ship2.x + ship2.size)
+                            return true;
+                    }
+                }
+            }
+            return false;
         }
         public void ShowShips()
         {
@@ -106,14 +165,14 @@ namespace BatallaNavalLogica.Entities
             }
             Console.WriteLine();
 
-            c = 'A';
-            foreach(Ship s in ships)
-            {
-                Console.Write($"{c}: {s.x}-{s.y}. size: {s.size} ");
-                if (s.orientation == 1) Console.WriteLine("Vertical");
-                else Console.WriteLine("Horizontal");
-                c++;
-            }
+            //c = 'A';
+            //foreach(Ship s in ships)
+            //{
+            //    Console.Write($"{c}: {s.x}-{s.y}. size: {s.size} ");
+            //    if (s.orientation == 1) Console.WriteLine("Vertical");
+            //    else Console.WriteLine("Horizontal");
+            //    c++;
+            //}
         }
     }
 }
