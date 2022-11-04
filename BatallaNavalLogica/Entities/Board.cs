@@ -35,6 +35,7 @@ namespace BatallaNavalLogica.Entities
                 for (int i = 0; i < cols; i++)
                     board[i, j] = ' ';
         }
+
         public void addShip()
         {
             Random r = new Random();
@@ -83,20 +84,39 @@ namespace BatallaNavalLogica.Entities
             }
             c++;
         }
+        public void Shoot()
+        {
+            /*
+             * Gestiona el disparo para el usuario
+             */
+            int x, y;
+            Console.WriteLine("Ingrese coordenadas para disparar:");
+            Console.Write("X: ");
+            x = int.Parse(Console.ReadLine());
+            Console.Write("Y: ");
+            y = int.Parse(Console.ReadLine());
+            FireIn(x, y);
+        }
+
         public void FireIn(int x, int y)
         {
             /*
              * Recibe un disparo en (x,y).
              */
-            if (board[x, y] != ' ')
+            if (board[x, y] == 'X')
             {
-                Console.WriteLine("Fuego");
+                // System.Console.WriteLine("Ya disparó aca");
             }
-            else
+            if (board[x, y] == 'O')
             {
-                Console.WriteLine("Agua");
+                board[x,y] = 'X';
+             }
+            if (board[x, y] == ' ')
+            {
+                board[x, y] = 'a';
             }
         }
+
         public bool CheckSuperposition(Ship ship2, List<Ship> ships)
         {
             foreach (Ship ship1 in ships)
@@ -148,12 +168,46 @@ namespace BatallaNavalLogica.Entities
         public void Show()
         {
             char c = 'A';
-            for(int i = 0; i < rows; i++)
+            for(int y = 0; y < rows; y++)
             {
                 Console.Write(c++);
-                for(int j = 0; j < cols; j++)
+                for (int x = 0; x < cols; x++)
                 {
-                    Console.Write("|" + board[j, i]);
+                    Console.Write("|");
+                    if (board[x, y] == 'X') Console.ForegroundColor = ConsoleColor.Red;
+                    else if (board[x, y] == 'a') Console.ForegroundColor = ConsoleColor.Blue;
+                    else Console.ForegroundColor = ConsoleColor.Green;
+                    
+                    Console.Write(board[x, y]);
+                    
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                Console.WriteLine("|");
+            }
+            Console.Write("  ");
+            for (int i = 0; i < cols; i++)
+            {
+                Console.Write($"{i + 1} ");
+            }
+            Console.WriteLine();
+        }
+        public void ShowShoots()
+        {
+            char c = 'A';
+            for(int y = 0; y < rows; y++)
+            {
+                Console.Write(c++);
+                for (int x = 0; x < cols; x++)
+                {
+                    Console.Write("|");
+                    if (board[x, y] == 'X') Console.ForegroundColor = ConsoleColor.Red;
+                    else if (board[x, y] == 'a') Console.ForegroundColor = ConsoleColor.Blue;
+                    else Console.ForegroundColor = ConsoleColor.Green;
+                    
+                    if(board[x,y] == 'O') System.Console.Write(' ');
+                    else Console.Write(board[x, y]);
+                    
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
                 Console.WriteLine("|");
             }

@@ -6,8 +6,8 @@ namespace BatallaNavalLogica.Entities
 {
     class Battleship
     {
-        public Board board1 { get; set; }
-        public Board board2 { get; set; }
+        public Board board1 { get; set; } // Jugador 1
+        public Board board2 { get; set; } // Jugador 2 (PC)
 
         public Battleship(int x, int y)
         {
@@ -25,17 +25,21 @@ namespace BatallaNavalLogica.Entities
         }
         public void StartGame()
         {
-            for(int i = 0; i < 100; i++)
+            // board2.Show();
+            Random r = new Random();
+            for(int i = 0; i < 1000; i++)
             {
-                /* Turnos pares */
+                /* Turnos pares: turno del Jugador 1 */
                 if (i % 2 == 0)
                 {
-                    
+                    board1.Show();
+                    board2.Shoot();
+                    board2.ShowShoots();
                 }
                 /* Turnos impares */
                 else
                 {
-
+                    board1.FireIn(r.Next(board2.cols),r.Next(board2.rows));
                 }
             }
         }
