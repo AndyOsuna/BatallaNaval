@@ -6,17 +6,20 @@ namespace BatallaNavalLogica.Entities
 {
     class Board
     {
+
+        /* Tamaño del tablero */
         public int cols { get; set; }
         public int rows { get; set; }
-        private List<Ship> ships { get; set; }
         /* Lista de barcos que pertenecen al barco */
-        public char[,] board { get; set; }
+        public List<Ship> ships { get; set; }
         /* board guarda cada ubicación, guardando si cada celda está ocupada o no por un barco */
-        public List<Ship> GetShips() => ships;
+        public char[,] board { get; set; }
 
         public Board()
         {
             ships = new List<Ship>();
+            board = new char[cols, rows];
+            SetBoard0();
         }
         public Board(int cols, int rows)
         {
@@ -24,17 +27,13 @@ namespace BatallaNavalLogica.Entities
             this.rows = rows;
             ships = new List<Ship>();
             board = new char[cols, rows];
-            set0();
+            SetBoard0();
         }
-        public void set0()
+        public void SetBoard0()
         {
             for (int j = 0; j < rows; j++)
-            {
                 for (int i = 0; i < cols; i++)
-                {
                     board[i, j] = ' ';
-                }
-            }
         }
         public void addShip()
         {
@@ -48,42 +47,55 @@ namespace BatallaNavalLogica.Entities
                 //if (s.orientation == 1) Console.WriteLine("Vertical");
                 //else Console.WriteLine("Horizontal");
 
-                /* Para el caso en el que no quepa el barco en el tablero:
+                /* Correccion de coordenada del barco, cuando sobresale del tablero por el borde inferior y derecho.
+                 * Para el caso en el que no quepa el barco en el tablero:
                     * Cuando la coordenada está cerca de un borde del tablero, y por el tamaño sobresale de él.
                     * Lo que hacemos es correrlo hacia adentro, según la orientacion. Para eso utilizamos la variable 'offset'.
                     * Sabemos que sobresale del tablero cuando su coordenada (x ó y) mas el tamaño, 
                     * son mayores al tamaño del tablero en dicha dimensión (x ó y).
-                    offset = barco.coordenada + barco.tamaño - tablero. */
-
+                    offset = barco.coordenada + barco.tamaño - tablero. 
+                */
+                // 1 = Orientacion Vertical
                 if (s.orientation == 1)
-                {   // 1 = Orientacion Vertical
-
+                {   
                     int offset = 0;
                     if (s.y + s.size > rows) offset = s.y + s.size - rows;
                     s.y -= offset;
-                    /*for (int i = 0; i < s.size; i++)
-                    {
-                        board[s.x, s.y + i] = 'X';
-                    }*/
                 }
+                // 0 = Orientacion Horizontal
                 else
-                {   // 0 = Orientacion Horizontal
+                {   
                     int offset = 0;
                     if (s.x + s.size > cols) offset = s.x + s.size - cols;
-                    /* Igual que el caso vertical */
                     s.x -= offset;
-                    /*for (int i = 0; i < s.size; i++)
-                    {
-                        board[s.x + i, s.y] = 'X';
-                    }*/
                 }
             }
             while (CheckSuperposition(s, ships));
-            ships.Add(s);
-        }
-        public void DestroyShip()
-        {
+            /* Corta el bucle cuando ya no se superponen el nuevo barco con los que ya estaban */
+            ships.Add(s); /* Se añade el barco a la lista */
 
+            /* Se actualiza la matriz del tablero. */
+            char c = 'O';
+            for (int i = 0; i < s.size; i++)
+            {
+                if (s.orientation == 1) board[s.x, s.y + i] = c;
+                else board[s.x + i, s.y] = c;
+            }
+            c++;
+        }
+        public void FireIn(int x, int y)
+        {
+            /*
+             * Recibe un disparo en (x,y).
+             */
+            if (board[x, y] != ' ')
+            {
+                Console.WriteLine("Fuego");
+            }
+            else
+            {
+                Console.WriteLine("Agua");
+            }
         }
         public bool CheckSuperposition(Ship ship2, List<Ship> ships)
         {
@@ -132,20 +144,7 @@ namespace BatallaNavalLogica.Entities
             }
             return false;
         }
-        public void ShowShips()
-        {
-            char c = 'A';
-            foreach(Ship s in ships)
-            {
-                for(int i = 0; i < s.size; i++)
-                {
-                    if (s.orientation == 1) board[s.x, s.y + i] = c;
-                    else board[s.x + i, s.y] = c;
-                }
-                c++;
-            }
-            Show();
-        }
+
         public void Show()
         {
             char c = 'A';
@@ -164,15 +163,6 @@ namespace BatallaNavalLogica.Entities
                 Console.Write($"{i + 1} ");
             }
             Console.WriteLine();
-
-            //c = 'A';
-            //foreach(Ship s in ships)
-            //{
-            //    Console.Write($"{c}: {s.x}-{s.y}. size: {s.size} ");
-            //    if (s.orientation == 1) Console.WriteLine("Vertical");
-            //    else Console.WriteLine("Horizontal");
-            //    c++;
-            //}
         }
     }
 }

@@ -6,46 +6,53 @@ namespace BatallaNavalLogica.Entities
 {
     class Battleship
     {
-        public Board board { get; set; }
+        public Board board1 { get; set; }
+        public Board board2 { get; set; }
 
         public Battleship(int x, int y)
         {
-            board = new Board(x, y);
+            board1 = new Board(x, y);
+            board2 = new Board(x, y);
         }
 
         public void Setup(int numShips)
         {
-            Random r = new Random();
-
             for (int i = 0; i < numShips; i++)
             {
-                board.addShip();
+                board1.addShip();
+                board2.addShip();
+            }
+        }
+        public void StartGame()
+        {
+            for(int i = 0; i < 100; i++)
+            {
+                /* Turnos pares */
+                if (i % 2 == 0)
+                {
+                    
+                }
+                /* Turnos impares */
+                else
+                {
+
+                }
             }
         }
 
         public void ShowThisShips(List<Ship> ships)
         {
-            char[,] tmpBoard = new char[board.cols, board.rows];
-            for (int i = 0; i < board.cols; i++) for (int j = 0; j < board.rows; j++) tmpBoard[i, j] = ' ';
-            char indx = 'a';
-            foreach(Ship s in ships)
-            {
-                for (int i = 0; i < s.size; i++)
-                {
-                    if(s.orientation==0) tmpBoard[s.x+i, s.y] = indx;
-                    if(s.orientation==1) tmpBoard[s.x, s.y+i] = indx;
-                }
-                indx++;
-            }
-            Console.Clear();
-            for(int j = 0; j < board.rows; j++)
-            {
-                for(int i = 0; i < board.cols; i++)
-                {
-                    Console.Write($"|{tmpBoard[i, j]}");
-                }
-                Console.WriteLine("|");
-            }
+            Board tmpBoard = new Board(board1.cols, board1.rows);
+            tmpBoard.ships = ships;
+            tmpBoard.Show();
+            
+            Console.ReadLine();
+        }public void ShowThisShips(Ship ship)
+        {
+            Board tmpBoard = new Board(board1.cols, board1.rows);
+            tmpBoard.ships.Add(ship);
+            tmpBoard.Show();
+            
             Console.ReadLine();
         }
     }
