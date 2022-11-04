@@ -5,13 +5,28 @@ namespace BatallaNavalLogica
 {
     class Program
     {
+        /* 
+         * Entidades: 
+         *  Ship (barco)
+         *  Board (tablero)
+         *  Battleship (batalla naval)
+         */
+        /*
+         * El programa debe crear dos tableros, para la persona y para la PC. Debe gestionar los turnos
+         * Debe gestionar los disparos.
+         * La inteligencia disparará aleatoriamente. Cuando le pegue a un barco, deberá disparar por 
+         * esa zona donde pegó, hasta undir el o los barcos dados.
+         */
         static void Main(string[] args)
         {
-            int shipNum = 50, x = 50, y = 30;
-            Battleship bs = new Battleship(x, y);
+            //Cantidad de barcos
+            int shipNum = 5;
+            //Tamaño del tablero
+            int x = 10, y = 10;
 
+            Battleship bs = new Battleship(x, y);
             bs.Setup(shipNum);
-            bs.board.Show();
+            bs.StartGame();
         }
     }
 }

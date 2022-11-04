@@ -6,19 +6,23 @@ namespace BatallaNavalLogica.Entities
 {
     class Ship
     {
+
         public int size { get; set; }
+        /* Su tamaño o largo: entre 2 y 5 */
         public int x { get; set; }
         public int y { get; set; }
+         /* Coordenadas dentro del tablero al que pertenezca */
         public int orientation { get; set; }
         /* 0: horizontal
          * 1: vertical */
 
+        /* Por defecto, todos los valores en 0*/
         public Ship()
         {
-            this.size = 0;
-            this.x = 0;
-            this.y = 0;
-            this.orientation = 0;
+            size = 0;
+            x = 0;
+            y = 0;
+            orientation = 0;
         }
 
         public Ship(int x, int y, int size, int orientation)
