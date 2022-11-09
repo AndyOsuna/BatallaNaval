@@ -25,23 +25,31 @@ namespace BatallaNavalLogica.Entities
         }
         public void StartGame()
         {
-            // board2.Show();
-            Random r = new Random();
-            for(int i = 0; i < 1000; i++)
+            int i;
+            //Random r = new Random();
+            for (i = 0; board1.CheckLivies() && board2.CheckLivies(); i++)
             {
                 /* Turnos pares: turno del Jugador 1 */
                 if (i % 2 == 0)
                 {
-                    board1.Show();
-                    board2.Shoot();
+                    Console.WriteLine("Jugador 1");
                     board2.ShowShoots();
+                    board1.Show();
+                    if (board2.Shoot()) Console.WriteLine("Hundiste un barco pibito!");
                 }
-                /* Turnos impares */
-                else
+                /* Turnos impares: Jugador 2 */
+                if (i % 2 == 1)
                 {
-                    board1.FireIn(r.Next(board2.cols),r.Next(board2.rows));
+                    Console.WriteLine("Jugador 2");
+                    board1.ShowShoots();
+                    board2.Show();
+                    if (board1.Shoot()) Console.WriteLine("Hundiste un barco pibito!");
                 }
             }
+            if (i % 2 == 0)
+                Console.WriteLine("Gano jugador 2");
+            else
+                Console.WriteLine("Gano jugador 1");
         }
 
         public void ShowThisShips(List<Ship> ships)
