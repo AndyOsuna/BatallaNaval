@@ -29,13 +29,14 @@ namespace BatallaNavalLogica.Entities
             //Random r = new Random();
             for (i = 0; board1.CheckLivies() && board2.CheckLivies(); i++)
             {
+                Console.Clear();
                 /* Turnos pares: turno del Jugador 1 */
                 if (i % 2 == 0)
                 {
                     Console.WriteLine("Jugador 1");
                     board2.ShowShoots();
                     board1.Show();
-                    if (board2.Shoot()) Console.WriteLine("Hundiste un barco pibito!");
+                    board2.Shoot();
                 }
                 /* Turnos impares: Jugador 2 */
                 if (i % 2 == 1)
@@ -43,7 +44,7 @@ namespace BatallaNavalLogica.Entities
                     Console.WriteLine("Jugador 2");
                     board1.ShowShoots();
                     board2.Show();
-                    if (board1.Shoot()) Console.WriteLine("Hundiste un barco pibito!");
+                    board1.Shoot();
                 }
             }
             if (i % 2 == 0)
