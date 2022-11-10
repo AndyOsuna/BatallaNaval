@@ -1,6 +1,6 @@
 # Batalla Naval
 
-Laburen che
+Laburen che ---> de una
 ### Trabajo dividido en:
 - Lógica
 - Visual (ventanas)
