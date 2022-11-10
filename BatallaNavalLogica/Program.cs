@@ -20,9 +20,9 @@ namespace BatallaNavalLogica
         static void Main(string[] args)
         {
             //Cantidad de barcos
-            int shipNum = 1;
+            int shipNum = 6;
             //Tamaño del tablero
-            int x = 7, y = 7;
+            int x = 9, y = 9;
 
             Battleship bs = new Battleship(x, y);
             bs.Setup(shipNum);
