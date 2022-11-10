@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TP2.Controller;
 
 namespace BatallaNavalLogica.Entities
 {
@@ -35,14 +36,24 @@ namespace BatallaNavalLogica.Entities
                 for (int i = 0; i < cols; i++)
                     board[i, j] = ' ';
         }
+
+        public bool CheckLivies()
+        {
+            /* Chequea barco por barco, si al menos uno tiene una vida. Cuando ninguno tenga vida, retorna False */
+            foreach (Ship s in ships)
+                foreach (PartShip l in s.life)
+                    if (l.life) return true;
+            return false;
+        }
         public void addShip()
         {
             Random r = new Random();
             Ship s = new Ship();
             do
             {
-                s = new Ship(r.Next(cols), r.Next(rows), r.Next(2, 6), r.Next(2));
-
+                bool or = false;
+                if (r.Next(2) == 1) or = true;
+                s = new Ship(r.Next(cols), r.Next(rows), r.Next(2, 6), or);
                 //Console.Write($"{i}: {s.x}-{s.y}. size: {s.size} ");
                 //if (s.orientation == 1) Console.WriteLine("Vertical");
                 //else Console.WriteLine("Horizontal");
@@ -56,15 +67,15 @@ namespace BatallaNavalLogica.Entities
                     offset = barco.coordenada + barco.tamaño - tablero. 
                 */
                 // 1 = Orientacion Vertical
-                if (s.orientation == 1)
-                {   
+                if (s.orientation)
+                {
                     int offset = 0;
                     if (s.y + s.size > rows) offset = s.y + s.size - rows;
                     s.y -= offset;
                 }
                 // 0 = Orientacion Horizontal
                 else
-                {   
+                {
                     int offset = 0;
                     if (s.x + s.size > cols) offset = s.x + s.size - cols;
                     s.x -= offset;
@@ -75,28 +86,61 @@ namespace BatallaNavalLogica.Entities
             ships.Add(s); /* Se añade el barco a la lista */
 
             /* Se actualiza la matriz del tablero. */
-            char c = 'O';
-            for (int i = 0; i < s.size; i++)
+            if (s.orientation)
             {
-                if (s.orientation == 1) board[s.x, s.y + i] = c;
-                else board[s.x + i, s.y] = c;
-            }
-            c++;
-        }
-        public void FireIn(int x, int y)
-        {
-            /*
-             * Recibe un disparo en (x,y).
-             */
-            if (board[x, y] != ' ')
-            {
-                Console.WriteLine("Fuego");
+                for (int i = 0; i < s.size; i++)
+                {
+                    char c = 'O';
+                    if (!s.life[i].life) c = 'X';
+                    board[s.x, s.y + i] = c;
+                }
             }
             else
             {
-                Console.WriteLine("Agua");
+                for (int i = 0; i < s.size; i++)
+                {
+                    char c = 'O';
+                    if (!s.life[i].life) c = 'X';
+                    board[s.x + i, s.y] = c;
+                }
             }
         }
+        public bool Shoot()
+        {
+            /*
+             * Gestiona el disparo para el usuario
+             */
+            int x, y;
+            Console.WriteLine("Ingrese coordenadas para disparar:");
+            Console.Write("X: ");
+            x = utils.ingresarIndice(cols);
+            Console.Write("Y: ");
+            y = utils.ingresarIndice(rows);
+
+            /*
+             * Recibe un disparo en (x,y).
+             */
+            switch (board[x, y])
+            {
+                // Le pega a un barco
+                case 'O':
+                    board[x, y] = 'X';
+                    foreach (Ship s in ships)
+                    {
+                        if (s.Hit(x, y)) return true;
+                    }
+                    break;
+                // Le pega al agua
+                case ' ':
+                    board[x, y] = 'a';
+                    break;
+                case 'X':
+                    Console.WriteLine("Ya disparaste aca capo");
+                    break;
+            }
+            return false;
+        }
+
         public bool CheckSuperposition(Ship ship2, List<Ship> ships)
         {
             foreach (Ship ship1 in ships)
@@ -105,9 +149,9 @@ namespace BatallaNavalLogica.Entities
                 //xd.Add(s); xd.Add(ship);
                 //ShowThisShips(xd);
 
-                if (ship1.orientation == 1)
+                if (ship1.orientation)
                 {
-                    if (ship2.orientation == 1)
+                    if (ship2.orientation)
                     {
                         if (ship1.x == ship2.x &&
                             ship1.y + ship1.size >= ship2.y &&
@@ -125,7 +169,7 @@ namespace BatallaNavalLogica.Entities
                 }
                 else
                 {
-                    if (ship2.orientation == 1)
+                    if (ship2.orientation)
                     {
                         if (ship2.x >= ship1.x &&
                             ship2.x <= ship1.x + ship1.size &&
@@ -147,20 +191,56 @@ namespace BatallaNavalLogica.Entities
 
         public void Show()
         {
+            /* Muestra el tablero en consola, con barcos en verde, disparos al agua en azul y disparos a barcos en rojo */
             char c = 'A';
-            for(int i = 0; i < rows; i++)
+            for(int y = 0; y < rows; y++)
             {
-                Console.Write(c++);
-                for(int j = 0; j < cols; j++)
+                Console.Write(y+1);
+                for (int x = 0; x < cols; x++)
                 {
-                    Console.Write("|" + board[j, i]);
+                    Console.Write("|");
+                    if (board[x, y] == 'X') Console.ForegroundColor = ConsoleColor.Red;
+                    else if (board[x, y] == 'a') Console.ForegroundColor = ConsoleColor.Blue;
+                    else Console.ForegroundColor = ConsoleColor.Green;
+                    
+                    Console.Write(board[x, y]);
+                    
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
                 Console.WriteLine("|");
             }
             Console.Write("  ");
             for (int i = 0; i < cols; i++)
             {
-                Console.Write($"{i + 1} ");
+                Console.Write($"{i+1} ");
+            }
+            Console.WriteLine();
+        }
+        public void ShowShoots()
+        {
+            /* Muestra los disparos recibidos, ocultando los barcos. Utilizado para que el contrincante vea sus disparos. */
+            char c = 'A';
+            for(int y = 0; y < rows; y++)
+            {
+                Console.Write(y+1);
+                for (int x = 0; x < cols; x++)
+                {
+                    Console.Write("|");
+                    if (board[x, y] == 'X') Console.ForegroundColor = ConsoleColor.Red;
+                    else if (board[x, y] == 'a') Console.ForegroundColor = ConsoleColor.Blue;
+                    else Console.ForegroundColor = ConsoleColor.Green;
+                    
+                    if(board[x,y] == 'O') System.Console.Write(' ');
+                    else Console.Write(board[x, y]);
+                    
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                Console.WriteLine("|");
+            }
+            Console.Write("  ");
+            for (int i = 0; i < cols; i++)
+            {
+                Console.Write($"{i+1} ");
             }
             Console.WriteLine();
         }
