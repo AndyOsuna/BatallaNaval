@@ -6,7 +6,7 @@ namespace BatallaNavalLogica.Entities
 {
     class Ship
     {
-        public PartShip[] life { get; set; }
+        public PartShip[] parts { get; set; }
         public int x { get; set; }
         public int y { get; set; }
          /* Coordenadas dentro del tablero al que pertenezca */
@@ -14,16 +14,7 @@ namespace BatallaNavalLogica.Entities
         /* Su tamaño o largo: entre 2 y 5 */
         public bool orientation { get; set; }
         /* true: vertical 
-           false: horizontal*/
-
-        /* Por defecto, todos los valores en 0*/
-        public Ship()
-        {
-            size = 0;
-            x = 0;
-            y = 0;
-            orientation = false;
-        }
+           false: horizontal */
 
         public Ship(int x, int y, int size, bool orientation)
         {
@@ -31,39 +22,38 @@ namespace BatallaNavalLogica.Entities
             this.y = y;
             this.size = size;
             this.orientation = orientation;
-            Set();
+            SetParts();
         }
-        public void Set()
+        public void SetParts()
         {
-            life = new PartShip[size];
+            parts = new PartShip[size];
             for (int i = 0; i < size; i++)
             {
-                life[i] = new PartShip();
-                life[i].life = true;
+                parts[i] = new PartShip();
+                parts[i].life = true;
             }
 
-            if (orientation)    // Vertical
-                for (int i = 0; i < size; i++)
+            for (int i = 0; i < size; i++)
+                if (orientation)    // Vertical
                 {
-                    life[i].x = x;
-                    life[i].y = y + i;
+                    parts[i].x = x;
+                    parts[i].y = y + i;
                 }
-            else                // Horizontal
-                for(int i = 0; i < size; i++)
+                else                // Horizontal
                 {
-                    life[i].x = x + i;
-                    life[i].y = y;
+                    parts[i].x = x + i;
+                    parts[i].y = y;
                 }
         }
         public bool Hit(int x, int y)
         {
             /* Actualiza el arrays de vidas */
-            foreach (PartShip l in life)
+            foreach (PartShip l in parts)
                 if (l.x == x && l.y == y)
                     l.life = false;
 
             /* La funcion devuelve 'true' cuando el barco es hundido*/
-            foreach (PartShip l in life)
+            foreach (PartShip l in parts)
                 if (l.life) return false;
             return true;
         }

@@ -16,12 +16,6 @@ namespace BatallaNavalLogica.Entities
         /* board guarda cada ubicación, guardando si cada celda está ocupada o no por un barco */
         public char[,] board { get; set; }
 
-        public Board()
-        {
-            ships = new List<Ship>();
-            board = new char[cols, rows];
-            SetBoard0();
-        }
         public Board(int cols, int rows)
         {
             this.cols = cols;
@@ -30,7 +24,7 @@ namespace BatallaNavalLogica.Entities
             board = new char[cols, rows];
             SetBoard0();
         }
-        public void SetBoard0()
+        private void SetBoard0()
         {
             for (int j = 0; j < rows; j++)
                 for (int i = 0; i < cols; i++)
@@ -41,18 +35,20 @@ namespace BatallaNavalLogica.Entities
         {
             /* Chequea barco por barco, si al menos uno tiene una vida. Cuando ninguno tenga vida, retorna False */
             foreach (Ship s in ships)
-                foreach (PartShip l in s.life)
+                foreach (PartShip l in s.parts)
                     if (l.life) return true;
             return false;
         }
+
         public void addShip()
         {
             Random r = new Random();
-            Ship s = new Ship();
+            Ship s;
             do
             {
                 bool or = false;
                 if (r.Next(2) == 1) or = true;
+
                 s = new Ship(r.Next(cols), r.Next(rows), r.Next(2, 6), or);
                 //Console.Write($"{i}: {s.x}-{s.y}. size: {s.size} ");
                 //if (s.orientation == 1) Console.WriteLine("Vertical");
@@ -66,23 +62,25 @@ namespace BatallaNavalLogica.Entities
                     * son mayores al tamaño del tablero en dicha dimensión (x ó y).
                     offset = barco.coordenada + barco.tamaño - tablero. 
                 */
-                // 1 = Orientacion Vertical
+                // TRUE = Orientacion Vertical
                 if (s.orientation)
                 {
                     int offset = 0;
                     if (s.y + s.size > rows) offset = s.y + s.size - rows;
                     s.y -= offset;
                 }
-                // 0 = Orientacion Horizontal
+                // FALSE = Orientacion Horizontal
                 else
                 {
                     int offset = 0;
                     if (s.x + s.size > cols) offset = s.x + s.size - cols;
                     s.x -= offset;
                 }
+                s.SetParts();
             }
-            while (CheckSuperposition(s, ships));
+            while (CheckSuperposition(s));
             /* Corta el bucle cuando ya no se superponen el nuevo barco con los que ya estaban */
+
             ships.Add(s); /* Se añade el barco a la lista */
 
             /* Se actualiza la matriz del tablero. */
@@ -91,7 +89,7 @@ namespace BatallaNavalLogica.Entities
                 for (int i = 0; i < s.size; i++)
                 {
                     char c = 'O';
-                    if (!s.life[i].life) c = 'X';
+                    if (!s.parts[i].life) c = 'X';
                     board[s.x, s.y + i] = c;
                 }
             }
@@ -100,11 +98,68 @@ namespace BatallaNavalLogica.Entities
                 for (int i = 0; i < s.size; i++)
                 {
                     char c = 'O';
-                    if (!s.life[i].life) c = 'X';
+                    if (!s.parts[i].life) c = 'X';
                     board[s.x + i, s.y] = c;
                 }
             }
         }
+
+        public bool CheckSuperposition(Ship ship2)
+        {
+            foreach (Ship ship1 in ships)
+            {
+                //List<Ship> xd = new List<Ship>();
+                //xd.Add(s); xd.Add(ship);
+                //ShowThisShips(xd);
+                foreach (PartShip ps1 in ship1.parts)
+                {
+                    foreach (PartShip ps2 in ship2.parts)
+                    {
+                        if (ps1.x == ps2.x && ps1.y == ps2.y) return true;
+                    }
+                }
+/*
+                if (ship1.orientation)
+                {
+                    if (ship2.orientation)
+                    {
+                        if (ship1.x == ship2.x &&
+                            ship1.y + ship1.size >= ship2.y &&
+                            ship1.y <= ship2.y + ship2.size)
+                            return true;
+                    }
+                    else
+                    {
+                        if (ship1.x >= ship2.x &&
+                            ship1.x <= ship2.x + ship2.size &&
+                            ship2.y >= ship1.y &&
+                            ship2.y <= ship1.y + ship1.size)
+                            return true;
+                    }
+                }
+                else
+                {
+                    if (ship2.orientation)
+                    {
+                        if (ship2.x >= ship1.x &&
+                            ship2.x <= ship1.x + ship1.size &&
+                            ship1.y >= ship2.y &&
+                            ship1.y <= ship2.y + ship2.size)
+                            return true;
+                    }
+                    else
+                    {
+                        if (ship1.y == ship2.y &&
+                            ship1.x + ship1.size >= ship2.x &&
+                            ship1.x <= ship2.x + ship2.size)
+                            return true;
+                    }
+                }*/
+
+            }
+            return false;
+        }
+
         public bool Shoot()
         {
             /*
@@ -141,68 +196,20 @@ namespace BatallaNavalLogica.Entities
             return false;
         }
 
-        public bool CheckSuperposition(Ship ship2, List<Ship> ships)
-        {
-            foreach (Ship ship1 in ships)
-            {
-                //List<Ship> xd = new List<Ship>();
-                //xd.Add(s); xd.Add(ship);
-                //ShowThisShips(xd);
-
-                if (ship1.orientation)
-                {
-                    if (ship2.orientation)
-                    {
-                        if (ship1.x == ship2.x &&
-                            ship1.y + ship1.size >= ship2.y &&
-                            ship1.y <= ship2.y + ship2.size)
-                            return true;
-                    }
-                    else
-                    {
-                        if (ship1.x >= ship2.x &&
-                            ship1.x <= ship2.x + ship2.size &&
-                            ship2.y >= ship1.y &&
-                            ship2.y <= ship1.y + ship1.size)
-                            return true;
-                    }
-                }
-                else
-                {
-                    if (ship2.orientation)
-                    {
-                        if (ship2.x >= ship1.x &&
-                            ship2.x <= ship1.x + ship1.size &&
-                            ship1.y >= ship2.y &&
-                            ship1.y <= ship2.y + ship2.size)
-                            return true;
-                    }
-                    else
-                    {
-                        if (ship1.y == ship2.y &&
-                            ship1.x + ship1.size >= ship2.x &&
-                            ship1.x <= ship2.x + ship2.size)
-                            return true;
-                    }
-                }
-            }
-            return false;
-        }
-
         public void Show()
         {
             /* Muestra el tablero en consola, con barcos en verde, disparos al agua en azul y disparos a barcos en rojo */
             char c = 'A';
             for(int y = 0; y < rows; y++)
             {
-                Console.Write(y+1);
+                Console.Write(c++);
                 for (int x = 0; x < cols; x++)
                 {
                     Console.Write("|");
+
                     if (board[x, y] == 'X') Console.ForegroundColor = ConsoleColor.Red;
                     else if (board[x, y] == 'a') Console.ForegroundColor = ConsoleColor.Blue;
                     else Console.ForegroundColor = ConsoleColor.Green;
-                    
                     Console.Write(board[x, y]);
                     
                     Console.ForegroundColor = ConsoleColor.White;
@@ -212,17 +219,18 @@ namespace BatallaNavalLogica.Entities
             Console.Write("  ");
             for (int i = 0; i < cols; i++)
             {
-                Console.Write($"{i+1} ");
+                Console.Write($"{i} ");
             }
             Console.WriteLine();
         }
+
         public void ShowShoots()
         {
             /* Muestra los disparos recibidos, ocultando los barcos. Utilizado para que el contrincante vea sus disparos. */
             char c = 'A';
             for(int y = 0; y < rows; y++)
             {
-                Console.Write(y+1);
+                Console.Write(c++);
                 for (int x = 0; x < cols; x++)
                 {
                     Console.Write("|");
@@ -240,7 +248,7 @@ namespace BatallaNavalLogica.Entities
             Console.Write("  ");
             for (int i = 0; i < cols; i++)
             {
-                Console.Write($"{i+1} ");
+                Console.Write($"{i} ");
             }
             Console.WriteLine();
         }

@@ -39,7 +39,7 @@ namespace BatallaNavalLogica.Entities
                     board2.Shoot();
                 }
                 /* Turnos impares: Jugador 2 */
-                if (i % 2 == 1)
+                else
                 {
                     Console.WriteLine("Jugador 2");
                     board1.ShowShoots();
