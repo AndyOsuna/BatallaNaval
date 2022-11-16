@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BatallaNavalLogica.Entities
+namespace BatallaNaval.Entities
 {
     class Ship
     {

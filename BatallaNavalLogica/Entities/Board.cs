@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using TP2.Controller;
 
-namespace BatallaNavalLogica.Entities
+namespace BatallaNaval.Entities
 {
     class Board
     {
@@ -48,8 +47,8 @@ namespace BatallaNavalLogica.Entities
             {
                 bool or = false;
                 if (r.Next(2) == 1) or = true;
-
                 s = new Ship(r.Next(cols), r.Next(rows), r.Next(2, 6), or);
+
                 //Console.Write($"{i}: {s.x}-{s.y}. size: {s.size} ");
                 //if (s.orientation == 1) Console.WriteLine("Vertical");
                 //else Console.WriteLine("Horizontal");

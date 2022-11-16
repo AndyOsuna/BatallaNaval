@@ -2,49 +2,76 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BatallaNavalLogica.Entities
+namespace BatallaNaval.Entities
 {
     class Battleship
     {
-        public Board board1 { get; set; } // Jugador 1
-        public Board board2 { get; set; } // Jugador 2 (PC)
+        public static Board boardPlayer { get; set; } // Jugador 1
+        public static Board boardEnemy { get; set; } // Jugador 2 (PC)
 
-        public Battleship(int x, int y)
-        {
-            board1 = new Board(x, y);
-            board2 = new Board(x, y);
-        }
 
-        public void Setup(int numShips)
+        public static void Setup(int numShips,int x,int y)
         {
+            boardPlayer = new Board(x, y);
+            boardEnemy = new Board(x, y);
             for (int i = 0; i < numShips; i++)
             {
-                board1.addShip();
-                board2.addShip();
+                boardPlayer.addShip();
+                boardEnemy.addShip();
             }
         }
-        public void StartGame()
+        
+        public static void StartGame()
+        {
+            string[] ops = { "1. Jugador solo", "2. Contra PC", "3. Customizar juego" };
+            int op = utils.CreateMenu("modo de juego", ops);
+            switch(op)
+            {
+                case 0:
+                    PlayerAlone();
+                    break;
+                case 1:
+                    TwoPlayers();
+                    break;
+                case 2:
+                    Customize();
+                    break;
+            }
+        }
+        
+        public static void PlayerAlone()
+        {
+            while(boardEnemy.CheckLivies())
+            {
+                Console.Clear();
+                boardEnemy.ShowShoots();
+                boardEnemy.Shoot();
+            }
+            Console.WriteLine("Terminaste el juego");
+        }
+
+        public static void TwoPlayers()
         {
             int i;
             //Random r = new Random();
-            for (i = 0; board1.CheckLivies() && board2.CheckLivies(); i++)
+            for (i = 0; boardPlayer.CheckLivies() && boardEnemy.CheckLivies(); i++)
             {
                 Console.Clear();
                 /* Turnos pares: turno del Jugador 1 */
                 if (i % 2 == 0)
                 {
                     Console.WriteLine("Jugador 1");
-                    board2.ShowShoots();
-                    board1.Show();
-                    board2.Shoot(); // se dispara sobre el tablero 2
+                    boardEnemy.ShowShoots();
+                    boardPlayer.Show();
+                    boardEnemy.Shoot(); // se dispara sobre el tablero 2
                 }
                 /* Turnos impares: Jugador 2 */
                 else
                 {
                     Console.WriteLine("Jugador 2");
-                    board1.ShowShoots();
-                    board2.Show();
-                    board1.Shoot();
+                    boardPlayer.ShowShoots();
+                    boardEnemy.Show();
+                    boardPlayer.Shoot();
                 }
             }
             if (i % 2 == 0)
@@ -53,16 +80,36 @@ namespace BatallaNavalLogica.Entities
                 Console.WriteLine("Gano jugador 1");
         }
 
-        public void ShowThisShips(List<Ship> ships)
+        public static void Customize()
         {
-            Board tmpBoard = new Board(board1.cols, board1.rows);
+            Console.WriteLine("Ingrese cantidad de columnas para el tablero:");
+            int x = utils.ingresarInt();
+            Console.WriteLine("Ingrese cantidad de filas para el tablero:");
+            int y = utils.ingresarInt();
+
+            boardPlayer = new Board(x, y);
+            boardEnemy = new Board(x, y);
+
+            int[] cantShips = new int[4];
+            for(int i = 0; i < 4; i++)
+            {
+                Console.WriteLine("Ingrese la cantidad de barcos de tamaño "+(i+2)+":");
+                cantShips[i] = utils.ingresarInt();
+            }
+
+        }
+
+        public static void ShowThisShips(List<Ship> ships)
+        {
+            Board tmpBoard = new Board(boardPlayer.cols, boardPlayer.rows);
             tmpBoard.ships = ships;
             tmpBoard.Show();
-            
+
             Console.ReadLine();
-        }public void ShowThisShips(Ship ship)
+        }
+        public static void ShowThisShips(Ship ship)
         {
-            Board tmpBoard = new Board(board1.cols, board1.rows);
+            Board tmpBoard = new Board(boardPlayer.cols, boardPlayer.rows);
             tmpBoard.ships.Add(ship);
             tmpBoard.Show();
             
