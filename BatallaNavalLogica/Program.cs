@@ -20,7 +20,7 @@ namespace BatallaNavalLogica
         static void Main(string[] args)
         {
             //Cantidad de barcos
-            int shipNum = 8;
+            int shipNum = 30;
             //Tamaño del tablero
             int x = 10, y = 10;
             

@@ -36,7 +36,7 @@ namespace BatallaNavalLogica.Entities
                     Console.WriteLine("Jugador 1");
                     board2.ShowShoots();
                     board1.Show();
-                    board2.Shoot();
+                    board2.Shoot(); // se dispara sobre el tablero 2
                 }
                 /* Turnos impares: Jugador 2 */
                 else
