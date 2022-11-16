@@ -96,7 +96,6 @@ namespace BatallaNaval.Entities
                 Console.WriteLine("Ingrese la cantidad de barcos de tamaño "+(i+2)+":");
                 cantShips[i] = utils.ingresarInt();
             }
-
         }
 
         public static void ShowThisShips(List<Ship> ships)
