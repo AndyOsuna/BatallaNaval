@@ -1,0 +1,10 @@
+C:\Users\lauta\Desktop\FORM\BatallaNaval\BatallaNaval\bin\Debug\BatallaNaval.exe.config
+C:\Users\lauta\Desktop\FORM\BatallaNaval\BatallaNaval\bin\Debug\BatallaNaval.exe
+C:\Users\lauta\Desktop\FORM\BatallaNaval\BatallaNaval\bin\Debug\BatallaNaval.pdb
+C:\Users\lauta\Desktop\FORM\BatallaNaval\BatallaNaval\obj\Debug\BatallaNaval.csproj.AssemblyReference.cache
+C:\Users\lauta\Desktop\FORM\BatallaNaval\BatallaNaval\obj\Debug\BatallaNaval.Properties.Resources.resources
+C:\Users\lauta\Desktop\FORM\BatallaNaval\BatallaNaval\obj\Debug\BatallaNaval.csproj.GenerateResource.cache
+C:\Users\lauta\Desktop\FORM\BatallaNaval\BatallaNaval\obj\Debug\BatallaNaval.csproj.CoreCompileInputs.cache
+C:\Users\lauta\Desktop\FORM\BatallaNaval\BatallaNaval\obj\Debug\BatallaNaval.exe
+C:\Users\lauta\Desktop\FORM\BatallaNaval\BatallaNaval\obj\Debug\BatallaNaval.pdb
+C:\Users\lauta\Desktop\FORM\BatallaNaval\BatallaNaval\obj\Debug\BatallaNaval.Login.resources
