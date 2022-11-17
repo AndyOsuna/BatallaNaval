@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BatallaNaval.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -47,6 +48,9 @@ namespace BatallaNaval
         [STAThread]
         static void Main()
         {
+            //Battleship.Setup(7, 10, 10);
+            //Battleship.StartGame();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Login());

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using TP2.Controller;
 
 namespace BatallaNaval.Entities
 {
@@ -48,8 +47,8 @@ namespace BatallaNaval.Entities
             {
                 bool or = false;
                 if (r.Next(2) == 1) or = true;
-
                 s = new Ship(r.Next(cols), r.Next(rows), r.Next(2, 6), or);
+
                 //Console.Write($"{i}: {s.x}-{s.y}. size: {s.size} ");
                 //if (s.orientation == 1) Console.WriteLine("Vertical");
                 //else Console.WriteLine("Horizontal");
@@ -118,53 +117,15 @@ namespace BatallaNaval.Entities
                         if (ps1.x == ps2.x && ps1.y == ps2.y) return true;
                     }
                 }
-/*
-                if (ship1.orientation)
-                {
-                    if (ship2.orientation)
-                    {
-                        if (ship1.x == ship2.x &&
-                            ship1.y + ship1.size >= ship2.y &&
-                            ship1.y <= ship2.y + ship2.size)
-                            return true;
-                    }
-                    else
-                    {
-                        if (ship1.x >= ship2.x &&
-                            ship1.x <= ship2.x + ship2.size &&
-                            ship2.y >= ship1.y &&
-                            ship2.y <= ship1.y + ship1.size)
-                            return true;
-                    }
-                }
-                else
-                {
-                    if (ship2.orientation)
-                    {
-                        if (ship2.x >= ship1.x &&
-                            ship2.x <= ship1.x + ship1.size &&
-                            ship1.y >= ship2.y &&
-                            ship1.y <= ship2.y + ship2.size)
-                            return true;
-                    }
-                    else
-                    {
-                        if (ship1.y == ship2.y &&
-                            ship1.x + ship1.size >= ship2.x &&
-                            ship1.x <= ship2.x + ship2.size)
-                            return true;
-                    }
-                }*/
-
             }
             return false;
         }
 
+        /* Añadir parametros (x, y) para recibir coordenada a donde disparar.
+         * Para que un boton desde una interfaz grafica le mande dicha coordenada. */
         public bool Shoot()
         {
-            /*
-             * Gestiona el disparo para el usuario
-             */
+             /* Gestiona el disparo para el usuario */
             int x, y;
             Console.WriteLine("Ingrese coordenadas para disparar:");
             Console.Write("X: ");

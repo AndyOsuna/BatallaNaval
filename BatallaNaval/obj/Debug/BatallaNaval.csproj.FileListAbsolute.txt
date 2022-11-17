@@ -8,3 +8,13 @@ C:\Users\lauta\Desktop\FORM\BatallaNaval\BatallaNaval\obj\Debug\BatallaNaval.csp
 C:\Users\lauta\Desktop\FORM\BatallaNaval\BatallaNaval\obj\Debug\BatallaNaval.exe
 C:\Users\lauta\Desktop\FORM\BatallaNaval\BatallaNaval\obj\Debug\BatallaNaval.pdb
 C:\Users\lauta\Desktop\FORM\BatallaNaval\BatallaNaval\obj\Debug\BatallaNaval.Login.resources
+C:\Users\osuna\Desktop\Batalla Naval\batallanaval\BatallaNaval\bin\Debug\BatallaNaval.exe.config
+C:\Users\osuna\Desktop\Batalla Naval\batallanaval\BatallaNaval\bin\Debug\BatallaNaval.exe
+C:\Users\osuna\Desktop\Batalla Naval\batallanaval\BatallaNaval\bin\Debug\BatallaNaval.pdb
+C:\Users\osuna\Desktop\Batalla Naval\batallanaval\BatallaNaval\obj\Debug\BatallaNaval.csproj.AssemblyReference.cache
+C:\Users\osuna\Desktop\Batalla Naval\batallanaval\BatallaNaval\obj\Debug\BatallaNaval.Properties.Resources.resources
+C:\Users\osuna\Desktop\Batalla Naval\batallanaval\BatallaNaval\obj\Debug\BatallaNaval.Login.resources
+C:\Users\osuna\Desktop\Batalla Naval\batallanaval\BatallaNaval\obj\Debug\BatallaNaval.csproj.GenerateResource.cache
+C:\Users\osuna\Desktop\Batalla Naval\batallanaval\BatallaNaval\obj\Debug\BatallaNaval.csproj.CoreCompileInputs.cache
+C:\Users\osuna\Desktop\Batalla Naval\batallanaval\BatallaNaval\obj\Debug\BatallaNaval.exe
+C:\Users\osuna\Desktop\Batalla Naval\batallanaval\BatallaNaval\obj\Debug\BatallaNaval.pdb
