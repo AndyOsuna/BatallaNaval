@@ -38,6 +38,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,6 +56,12 @@
     <Compile Include="Entities\PartShip.cs" />
     <Compile Include="Entities\Ship.cs" />
     <Compile Include="Persistence\pLogin.cs" />
+    <Compile Include="Views\Register.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Register.Designer.cs">
+      <DependentUpon>Register.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,9 +79,13 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Views\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Register.resx">
+      <DependentUpon>Register.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -91,6 +102,27 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bn_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bn_pasword.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bn_user.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bn_pasword1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bn_pasword2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bn_icon1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\superficie-subacuática-del-océano-fondo-agua-azul-limpie-el-contexto-subacuático-mar-de-la-naturaleza-con-cielo-118187969.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

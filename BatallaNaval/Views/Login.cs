@@ -40,5 +40,25 @@ namespace BatallaNaval
             String Password = ContraseñaTextBox.Text;
             bool response = pLogin.AuthLogin(User, Password);
         }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void UserTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
