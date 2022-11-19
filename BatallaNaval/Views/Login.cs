@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BatallaNaval.Persistence;
+using BatallaNaval.Views;
 
 namespace BatallaNaval
 {
@@ -18,6 +19,7 @@ namespace BatallaNaval
             InitializeComponent();
         }
 
+       
         
 
         private void Login_Load(object sender, EventArgs e)
@@ -38,7 +40,53 @@ namespace BatallaNaval
             
             String User = UserTextBox.Text;
             String Password = ContraseñaTextBox.Text;
-            bool response = pLogin.AuthLogin(User, Password);
+            bool response = pUser.authLogin(User, Password);
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void UserTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        
+        private void button2_Click(object sender, EventArgs e)
+        {
+            
+          
+
+
+        }
+
+        private Form activoForm = null;
+        public void abrirHijoForm(Form hijoForm)
+        {
+            if (activoForm != null)
+                activoForm.Close();
+             activoForm = hijoForm;
+            hijoForm.TopLevel = false;
+            hijoForm.FormBorderStyle = FormBorderStyle.None;
+            hijoForm.Dock = DockStyle.Fill;
+            panelHijoForm.Controls.Add(hijoForm);
+            panelHijoForm.Tag = hijoForm;
+            hijoForm.BringToFront();
+            hijoForm.Show();
+           
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            abrirHijoForm(new Register());
         }
     }
 }
