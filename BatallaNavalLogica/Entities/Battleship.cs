@@ -8,17 +8,24 @@ namespace BatallaNaval.Entities
     {
         public static Board boardPlayer { get; set; } // Jugador 1
         public static Board boardEnemy { get; set; } // Jugador 2 (PC)
+        private static IA ia;
 
-
-        public static void Setup(int numShips,int x,int y)
+        public static void Setup(int x, int y)
         {
             boardPlayer = new Board(x, y);
             boardEnemy = new Board(x, y);
-            for (int i = 0; i < numShips; i++)
-            {
-                boardPlayer.addShip();
-                boardEnemy.addShip();
-            }
+            ia = new IA();
+            boardPlayer.addShip(2);
+            boardPlayer.addShip(3);
+            boardPlayer.addShip(3);
+            boardPlayer.addShip(4);
+            boardPlayer.addShip(5);
+
+            boardEnemy.addShip(2);
+            boardEnemy.addShip(3);
+            boardEnemy.addShip(3);
+            boardEnemy.addShip(4);
+            boardEnemy.addShip(5);
         }
         
         public static void StartGame()
@@ -41,11 +48,17 @@ namespace BatallaNaval.Entities
         
         public static void PlayerAlone()
         {
-            while(boardEnemy.CheckLivies())
+            while (boardEnemy.CheckLivies())
             {
                 Console.Clear();
                 boardEnemy.ShowShoots();
-                boardEnemy.Shoot();
+                int x, y;
+                Console.WriteLine("Ingrese coordenadas para disparar:");
+                Console.Write("X: ");
+                x = utils.ingresarIndice(boardEnemy.cols);
+                Console.Write("Y: ");
+                y = utils.ingresarIndice(boardEnemy.rows);
+                boardEnemy.Shoot(x, y);
             }
             Console.WriteLine("Terminaste el juego");
         }
@@ -63,15 +76,26 @@ namespace BatallaNaval.Entities
                     Console.WriteLine("Jugador 1");
                     boardEnemy.ShowShoots();
                     boardPlayer.Show();
-                    boardEnemy.Shoot(); // se dispara sobre el tablero 2
+                    foreach (PartShip ps in ia.destroyedPartShips)
+                    {
+                        Console.WriteLine($"{ps.x} - {ps.y}");
+                    }
+                    int x, y;
+                    Console.WriteLine("Ingrese coordenadas para disparar:");
+                    Console.Write("X: ");
+                    x = utils.ingresarIndice(boardEnemy.cols);
+                    Console.Write("Y: ");
+                    y = utils.ingresarIndice(boardEnemy.rows);
+                    boardEnemy.Shoot(x, y); // se dispara sobre el tablero 2
                 }
-                /* Turnos impares: Jugador 2 */
+                /* Turnos impares: Jugador 2 (PC) */
                 else
                 {
                     Console.WriteLine("Jugador 2");
-                    boardPlayer.ShowShoots();
-                    boardEnemy.Show();
-                    boardPlayer.Shoot();
+                    int[] shoot = ia.Shoot(boardPlayer.boardShoots());
+
+                    if (boardPlayer.Shoot(shoot[0], shoot[1]))
+                        ia.addDestroyedPart(shoot[0], shoot[1]);
                 }
             }
             if (i % 2 == 0)

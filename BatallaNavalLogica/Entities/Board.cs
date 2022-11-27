@@ -39,7 +39,7 @@ namespace BatallaNaval.Entities
             return false;
         }
 
-        public void addShip()
+        public void addShip(int size)
         {
             Random r = new Random();
             Ship s;
@@ -47,7 +47,7 @@ namespace BatallaNaval.Entities
             {
                 bool or = false;
                 if (r.Next(2) == 1) or = true;
-                s = new Ship(r.Next(cols), r.Next(rows), r.Next(2, 6), or);
+                s = new Ship(r.Next(cols), r.Next(rows), size, or);
 
                 //Console.Write($"{i}: {s.x}-{s.y}. size: {s.size} ");
                 //if (s.orientation == 1) Console.WriteLine("Vertical");
@@ -117,59 +117,15 @@ namespace BatallaNaval.Entities
                         if (ps1.x == ps2.x && ps1.y == ps2.y) return true;
                     }
                 }
-/*
-                if (ship1.orientation)
-                {
-                    if (ship2.orientation)
-                    {
-                        if (ship1.x == ship2.x &&
-                            ship1.y + ship1.size >= ship2.y &&
-                            ship1.y <= ship2.y + ship2.size)
-                            return true;
-                    }
-                    else
-                    {
-                        if (ship1.x >= ship2.x &&
-                            ship1.x <= ship2.x + ship2.size &&
-                            ship2.y >= ship1.y &&
-                            ship2.y <= ship1.y + ship1.size)
-                            return true;
-                    }
-                }
-                else
-                {
-                    if (ship2.orientation)
-                    {
-                        if (ship2.x >= ship1.x &&
-                            ship2.x <= ship1.x + ship1.size &&
-                            ship1.y >= ship2.y &&
-                            ship1.y <= ship2.y + ship2.size)
-                            return true;
-                    }
-                    else
-                    {
-                        if (ship1.y == ship2.y &&
-                            ship1.x + ship1.size >= ship2.x &&
-                            ship1.x <= ship2.x + ship2.size)
-                            return true;
-                    }
-                }*/
-
             }
             return false;
         }
 
-        public bool Shoot()
+        public bool Shoot(int x, int y)
         {
             /*
              * Gestiona el disparo para el usuario
              */
-            int x, y;
-            Console.WriteLine("Ingrese coordenadas para disparar:");
-            Console.Write("X: ");
-            x = utils.ingresarIndice(cols);
-            Console.Write("Y: ");
-            y = utils.ingresarIndice(rows);
 
             /*
              * Recibe un disparo en (x,y).
@@ -181,15 +137,12 @@ namespace BatallaNaval.Entities
                     board[x, y] = 'X';
                     foreach (Ship s in ships)
                     {
-                        if (s.Hit(x, y)) return true;
+                        s.Hit(x, y);
                     }
-                    break;
+                    return true;
                 // Le pega al agua
                 case ' ':
                     board[x, y] = 'a';
-                    break;
-                case 'X':
-                    Console.WriteLine("Ya disparaste aca capo");
                     break;
             }
             return false;
@@ -236,8 +189,8 @@ namespace BatallaNaval.Entities
                     if (board[x, y] == 'X') Console.ForegroundColor = ConsoleColor.Red;
                     else if (board[x, y] == 'a') Console.ForegroundColor = ConsoleColor.Blue;
                     else Console.ForegroundColor = ConsoleColor.Green;
-                    
-                    if(board[x,y] == 'O') System.Console.Write(' ');
+
+                    if (board[x, y] == 'O') Console.Write(' ');
                     else Console.Write(board[x, y]);
                     
                     Console.ForegroundColor = ConsoleColor.White;
@@ -250,6 +203,20 @@ namespace BatallaNaval.Entities
                 Console.Write($"{i} ");
             }
             Console.WriteLine();
+
+        }
+        public char[,] boardShoots()
+        {
+            char[,] tmpBoard = new char[cols, rows];
+
+            for (int y = 0; y < rows; y++)
+                for (int x = 0; x < cols; x++)
+                    if (board[x, y] == 'O')
+                        tmpBoard[x, y] = ' ';
+                    else
+                        tmpBoard[x, y] = board[x, y];
+
+            return tmpBoard;
         }
     }
 }
