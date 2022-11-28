@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using BatallaNaval.Persistence;
 
 namespace BatallaNaval.Entities
 {
@@ -20,11 +21,29 @@ namespace BatallaNaval.Entities
                 boardEnemy.addShip();
             }
         } 
-        
+        public static void MainMenu()
+        {
+            string[] ops = { "1. Cargar partida", "2. Nueva partida" };
+            int op = utils.CreateMenu("una opcion", ops);
+            switch (op)
+            {
+                case 0:
+                    Console.WriteLine("Ingresar ID Partida");
+                    int i = utils.ingresarInt();
+                    pGame.SinglePlayerLoad(i);
+                    StartGame();
+                    break;
+                case 1:
+                    Setup(4,4,6);
+                    StartGame();
+                    break;
+            }
+        }
         public static void StartGame()
         {
             string[] ops = { "1. Jugador solo", "2. Contra PC", "3. Customizar juego" };
             int op = utils.CreateMenu("modo de juego", ops);
+            
             switch(op)
             {
                 case 0:
@@ -41,7 +60,14 @@ namespace BatallaNaval.Entities
         
         public static void PlayerAlone()
         {
-            while(boardEnemy.CheckLivies())
+            
+            int i = 0;
+            foreach(Ship s in boardEnemy.ships)
+            {
+                Console.WriteLine($"{i++}: {s.x} - {s.y}");
+            }
+            Console.WriteLine(i);
+            while (boardEnemy.CheckLivies())
             {
                 Console.Clear();
                 boardEnemy.ShowShoots();

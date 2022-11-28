@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using BatallaNaval.Persistence;
 namespace BatallaNaval
 {
     static class Program
     {
+        public static int IdentifiedUser { get; set; }//Propiedad que se setea al hacer el login y permite guardar en funcion del usuario registrado 
+
         /* 
          * Entidades: 
          *  Ship (barco)
@@ -48,9 +50,9 @@ namespace BatallaNaval
         [STAThread]
         static void Main()
         {
-            //Battleship.Setup(7, 10, 10);
-            //Battleship.StartGame();
-
+            
+            Battleship.MainMenu();
+            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Login());

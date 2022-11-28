@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using BatallaNaval.Persistence;
 
 namespace BatallaNaval.Entities
 {
@@ -12,9 +13,10 @@ namespace BatallaNaval.Entities
         public int rows { get; set; }
         /* Lista de barcos que pertenecen al barco */
         public List<Ship> ships { get; set; }
+        public List<int[]> water_drops { get; set; }
         /* board guarda cada ubicación, guardando si cada celda está ocupada o no por un barco */
         public char[,] board { get; set; }
-
+        
         public Board(int cols, int rows)
         {
             this.cols = cols;
@@ -22,6 +24,15 @@ namespace BatallaNaval.Entities
             ships = new List<Ship>();
             board = new char[cols, rows];
             SetBoard0();
+        }
+        public Board(int cols, int rows, List<Ship> ships, List<int[]> water_drops)
+        {
+            this.cols = cols;
+            this.rows = rows;
+            ships = new List<Ship>();
+            board = new char[cols, rows];
+            this.water_drops = water_drops;
+            //SetBoard1();
         }
         private void SetBoard0()
         {
@@ -37,6 +48,30 @@ namespace BatallaNaval.Entities
                 foreach (PartShip l in s.parts)
                     if (l.life) return true;
             return false;
+        }
+        public void addShip(Ship s)
+        {
+            ships.Add(s); /* Se añade el barco a la lista */
+
+            /* Se actualiza la matriz del tablero. */
+            if (s.orientation)
+            {
+                for (int i = 0; i < s.size; i++)
+                {
+                    char c = 'O';
+                    if (!s.parts[i].life) c = 'X';
+                    board[s.x, s.y + i] = c;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < s.size; i++)
+                {
+                    char c = 'O';
+                    if (!s.parts[i].life) c = 'X';
+                    board[s.x + i, s.y] = c;
+                }
+            }
         }
 
         public void addShip()
@@ -126,7 +161,15 @@ namespace BatallaNaval.Entities
         public bool Shoot()
         {
              /* Gestiona el disparo para el usuario */
-            int x, y;
+            int x, y; Console.WriteLine("Si desea guardar la partida presione escape");
+            Console.WriteLine("En caso contrario, presione enter e ingrese una coordenara para disparar");
+            ConsoleKeyInfo Tecla;
+            if ((Tecla = Console.ReadKey(true)).Key == ConsoleKey.Escape)
+            {
+                pGame.SinglePlayerSave(Battleship.boardEnemy);
+                Environment.Exit(1);
+            }
+            
             Console.WriteLine("Ingrese coordenadas para disparar:");
             Console.Write("X: ");
             x = utils.ingresarIndice(cols);

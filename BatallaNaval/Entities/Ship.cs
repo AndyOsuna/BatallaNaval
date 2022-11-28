@@ -9,7 +9,7 @@ namespace BatallaNaval.Entities
         public PartShip[] parts { get; set; }
         public int x { get; set; }
         public int y { get; set; }
-         /* Coordenadas dentro del tablero al que pertenezca */
+        /* Coordenadas dentro del tablero al que pertenezca */
         public int size { get; set; }
         /* Su tamaño o largo: entre 2 y 5 */
         public bool orientation { get; set; }
@@ -23,6 +23,15 @@ namespace BatallaNaval.Entities
             this.size = size;
             this.orientation = orientation;
             SetParts();
+        }
+        public Ship(int x, int y, bool orientation, PartShip[] parts)
+        {
+            this.x = x;
+            this.y = y;
+            this.size = parts.Length;
+            this.orientation = orientation;
+            this.parts = parts;
+
         }
         public void SetParts()
         {

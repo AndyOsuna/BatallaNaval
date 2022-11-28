@@ -13,18 +13,20 @@ namespace BatallaNaval.Persistence
             String user = User;
             string dbUser = "";
             string dbPassword = "";
+            int dbId = -1; 
 
             Conexion.OpenConexion();
             //query para verificar usuario y contraseña
-            String query = @"SELECT username, password FROM  user WHERE username = @username AND password = @password";
+            String query = @"SELECT username, password, id FROM  user WHERE username = @username AND password = @password";
             SQLiteCommand cmd = new SQLiteCommand(query, Conexion.Connection);
             cmd.Parameters.Add(new SQLiteParameter ("@username", user));
             cmd.Parameters.Add(new SQLiteParameter ("@password", password));
-            SQLiteDataReader dr = cmd.ExecuteReader();                       //tobi estuvo aqui
+            SQLiteDataReader dr = cmd.ExecuteReader();                       
             while (dr.Read())
             {
                 dbUser = dr.GetString(0);
                 dbPassword = dr.GetString(1);
+                dbId = dr.GetInt32(2);
 
             }
             if (dbUser == user && dbPassword == password)
@@ -33,6 +35,7 @@ namespace BatallaNaval.Persistence
             }
 
             return auth;
+            Program.IdentifiedUser = dbId;
         }
         public static bool regUser(String name, String lastName, String username, String password, String Email)
         {
