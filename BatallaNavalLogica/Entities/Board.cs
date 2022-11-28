@@ -107,9 +107,6 @@ namespace BatallaNaval.Entities
         {
             foreach (Ship ship1 in ships)
             {
-                //List<Ship> xd = new List<Ship>();
-                //xd.Add(s); xd.Add(ship);
-                //ShowThisShips(xd);
                 foreach (PartShip ps1 in ship1.parts)
                 {
                     foreach (PartShip ps2 in ship2.parts)

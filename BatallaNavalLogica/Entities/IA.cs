@@ -51,13 +51,18 @@ namespace BatallaNaval.Entities
                 {
                     if (!orientFinded && !shootPreviously)
                     {
-                        wasWater();
+                        switchDirection();
                     }
                     else
                     {
                         if (!shootPreviously)
                         {
-                            /* Volver al primer disparo y*/
+                            /* Volver al primer disparo y continuar por el otro lado */
+                            PartShip p = destroyedPartShips[0];
+                            destroyedPartShips = new List<PartShip>();
+                            destroyedPartShips.Add(p);
+                            ps = p;
+                            switchDirection();
                         }
                     }
 
@@ -78,7 +83,7 @@ namespace BatallaNaval.Entities
             }
             return new int[] { x, y };
         }
-        public void wasWater()
+        public void switchDirection()
         {
             if (!sentChanged)
             {
@@ -88,7 +93,7 @@ namespace BatallaNaval.Entities
             }
             else
             {
-                if (!orientChanged)
+                if (!orientChanged && !orientFinded)
                 {
                     if (lastOrientation) lastOrientation = false;
                     else lastOrientation = true;
