@@ -31,7 +31,8 @@ namespace BatallaNaval.Entities
         public static void StartGame()
         {
             string[] ops = { "1. Jugador solo", "2. Contra PC", "3. Customizar juego" };
-            int op = utils.CreateMenu("modo de juego", ops);
+            int op = 1;
+            //int op = utils.CreateMenu("modo de juego", ops);
             switch(op)
             {
                 case 0:
@@ -85,6 +86,7 @@ namespace BatallaNaval.Entities
                 else
                 {
                     //Console.WriteLine("Jugador 2");
+                    ia.checkDestroyedShip();
                     int[] shoot = ia.Shoot(boardPlayer.boardShoots());
 
                     if(boardPlayer.Shoot(shoot[0], shoot[1]))

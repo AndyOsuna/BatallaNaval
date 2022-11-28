@@ -6,12 +6,13 @@ namespace BatallaNaval.Entities
 {
     class IA
     {
+        /* Esta lista será para cada barco. Cuando se concluya con un barco, se reseteará */
         public List<PartShip> destroyedPartShips;
-        public bool shootPreviously;  // Si en el anterior turno le pegó a un barco
+        public bool shootPreviously; // Si en el anterior turno le pegó a un barco
         public bool orientChanged;
         public bool sentChanged;
         public bool orientFinded;
-        public bool lastOrientation;
+        public bool lastOrientation; 
         public int lastSentido;
 
         public IA()
@@ -33,8 +34,8 @@ namespace BatallaNaval.Entities
                 {
                     x = r.Next(cols);
                     y = r.Next(rows);
-                    Console.WriteLine("BUcleeeeeeeee");
-                } while (board[x, y] == 'a' || board[x, y] == 'X');
+                } 
+                while (board[x, y] == 'a' || board[x, y] == 'X');
                 /* Este bucle se asegura de no disparar varias veces en el mismo lugar */
 
                 return new int[] { x, y };
@@ -69,10 +70,12 @@ namespace BatallaNaval.Entities
                     if (lastOrientation)
                     {
                         x = ps.x;
+                        if (ps.y + lastSentido < 0 || ps.y + lastSentido > (rows - 1)) switchDirection();
                         y = ps.y + lastSentido;
                     }
                     else
                     {
+                        if (ps.x + lastSentido < 0 || ps.x + lastSentido > (cols - 1)) switchDirection();
                         x = ps.x + lastSentido;
                         y = ps.y;
                     }
@@ -102,9 +105,9 @@ namespace BatallaNaval.Entities
                 }
             }
         }
-        public void wasFire()
+        public void checkDestroyedShip()
         {
-
+            if (!shootPreviously && orientFinded) destroyedPartShips = new List<PartShip>();
         }
         public void reset()
         {
