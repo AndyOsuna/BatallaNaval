@@ -36,7 +36,10 @@ namespace BatallaNaval.Persistence
         }
         public static bool regUser(String name, String lastName, String username, String password, String Email)
         {
-            bool result = true;
+            if (verifyUsername(username))
+            {
+                return false;
+            }
             string Password = EncoderMD5.Encode(password);
             //query para  registrar nuevo usuario
             Conexion.OpenConexion();
@@ -47,18 +50,24 @@ namespace BatallaNaval.Persistence
             cmd.Parameters.Add(new SQLiteParameter("@username", username));
             cmd.Parameters.Add(new SQLiteParameter("@password", Password));
             cmd.Parameters.Add(new SQLiteParameter("@email", Email));
-            if (cmd.ExecuteNonQuery()<1)
-            {
-                result = false;
-            }
-            return result;
+            cmd.ExecuteNonQuery();
+            return true;
         }
         public static bool verifyUsername(String username)
         {
-            bool exist = false;
+            string dbUser="";
+            String query = @"SELECT username FROM  user WHERE username = @username ";
+            SQLiteCommand cmd = new SQLiteCommand(query, Conexion.Connection);
+            cmd.Parameters.Add(new SQLiteParameter("@username", username));
+            SQLiteDataReader dr = cmd.ExecuteReader();                       
+            while (dr.Read())
+            {
+                dbUser = dr.GetString(0);
+            }
+            if (dbUser == username) return true;
 
-            //query para verificar existencia 
-            return exist;
+
+                return false;
         }
     }
 }

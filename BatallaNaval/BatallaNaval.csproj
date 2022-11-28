@@ -72,7 +72,6 @@
   <ItemGroup>
     <Compile Include="Entities\Battleship.cs" />
     <Compile Include="Entities\Board.cs" />
-    <Compile Include="Entities\EncoderMD5.cs" />
     <Compile Include="Entities\PartShip.cs" />
     <Compile Include="Entities\Ship.cs" />
     <Compile Include="Persistence\Conexion.cs" />
@@ -118,6 +117,7 @@
     <EmbeddedResource Include="Views\Register.resx">
       <DependentUpon>Register.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="bin\Debug\BatallaNavalDB.db" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
