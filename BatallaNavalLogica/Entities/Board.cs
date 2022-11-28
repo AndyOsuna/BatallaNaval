@@ -131,6 +131,7 @@ namespace BatallaNaval.Entities
              * Recibe un disparo en (x,y).
              */
             switch (board[x, y])
+            
             {
                 // Le pega a un barco
                 case 'O':

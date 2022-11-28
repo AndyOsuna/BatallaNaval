@@ -74,28 +74,22 @@ namespace BatallaNaval.Entities
                 if (i % 2 == 0)
                 {
                     Console.WriteLine("Jugador 1");
-                    boardEnemy.ShowShoots();
                     boardPlayer.Show();
-                    foreach (PartShip ps in ia.destroyedPartShips)
-                    {
-                        Console.WriteLine($"{ps.x} - {ps.y}");
-                    }
-                    int x, y;
-                    Console.WriteLine("Ingrese coordenadas para disparar:");
-                    Console.Write("X: ");
-                    x = utils.ingresarIndice(boardEnemy.cols);
-                    Console.Write("Y: ");
-                    y = utils.ingresarIndice(boardEnemy.rows);
+                    boardEnemy.ShowShoots();
+                    Random r = new Random();
+                    int x = r.Next(boardEnemy.cols);
+                    int y = r.Next(boardEnemy.rows);
                     boardEnemy.Shoot(x, y); // se dispara sobre el tablero 2
                 }
                 /* Turnos impares: Jugador 2 (PC) */
                 else
                 {
-                    Console.WriteLine("Jugador 2");
+                    //Console.WriteLine("Jugador 2");
                     int[] shoot = ia.Shoot(boardPlayer.boardShoots());
 
-                    if (boardPlayer.Shoot(shoot[0], shoot[1]))
+                    if(boardPlayer.Shoot(shoot[0], shoot[1]))
                         ia.addDestroyedPart(shoot[0], shoot[1]);
+
                 }
             }
             if (i % 2 == 0)
