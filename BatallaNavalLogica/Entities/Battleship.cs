@@ -9,12 +9,14 @@ namespace BatallaNaval.Entities
         public static Board boardPlayer { get; set; } // Jugador 1
         public static Board boardEnemy { get; set; } // Jugador 2 (PC)
         private static IA ia;
+        private static IA ia2;
 
         public static void Setup(int x, int y)
         {
             boardPlayer = new Board(x, y);
             boardEnemy = new Board(x, y);
             ia = new IA();
+            ia2 = new IA();
             boardPlayer.addShip(2);
             boardPlayer.addShip(3);
             boardPlayer.addShip(3);
@@ -31,8 +33,8 @@ namespace BatallaNaval.Entities
         public static void StartGame()
         {
             string[] ops = { "1. Jugador solo", "2. Contra PC", "3. Customizar juego" };
-            int op = 1;
-            //int op = utils.CreateMenu("modo de juego", ops);
+            //int op = 3;
+            int op = utils.CreateMenu("modo de juego", ops);
             switch(op)
             {
                 case 0:
@@ -43,6 +45,9 @@ namespace BatallaNaval.Entities
                     break;
                 case 2:
                     Customize();
+                    break;
+                case 3:
+                    IAvsIA();
                     break;
             }
         }
@@ -95,9 +100,9 @@ namespace BatallaNaval.Entities
                 }
             }
             if (i % 2 == 0)
-                Console.WriteLine("Gano jugador 2");
+                Console.WriteLine("Gano la PC");
             else
-                Console.WriteLine("Gano jugador 1");
+                Console.WriteLine("Gano el jugador");
         }
 
         public static void Customize()
@@ -116,6 +121,41 @@ namespace BatallaNaval.Entities
                 Console.WriteLine("Ingrese la cantidad de barcos de tamaño "+(i+2)+":");
                 cantShips[i] = utils.ingresarInt();
             }
+        }
+
+        public static void IAvsIA()
+        {
+            int i;
+            //Random r = new Random();
+            for (i = 0; boardPlayer.CheckLivies() && boardEnemy.CheckLivies(); i++)
+            {
+                /* Turnos pares: turno del Jugador 1 */
+                if (i % 2 == 0)
+                {
+                    ia2.checkDestroyedShip();
+                    int[] shoot = ia2.Shoot(boardEnemy.boardShoots());
+
+                    if (boardEnemy.Shoot(shoot[0], shoot[1]))
+                        ia2.addDestroyedPart(shoot[0], shoot[1]);
+                }
+                /* Turnos impares: Jugador 2 (PC) */
+                else
+                {
+                    ia.checkDestroyedShip();
+                    int[] shoot = ia.Shoot(boardPlayer.boardShoots());
+
+                    if (boardPlayer.Shoot(shoot[0], shoot[1]))
+                        ia.addDestroyedPart(shoot[0], shoot[1]);
+
+                }
+                Console.Clear();
+                boardPlayer.Show();
+                boardEnemy.Show();
+            }
+                if (i % 2 == 0)
+                    Console.WriteLine("Gano IA 2");
+                else
+                    Console.WriteLine("Gano IA 1");
         }
 
         public static void ShowThisShips(List<Ship> ships)

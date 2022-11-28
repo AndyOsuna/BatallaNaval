@@ -22,7 +22,6 @@ namespace BatallaNaval.Entities
 
         public int[] Shoot(char[,] board)
         {
-            Random r = new Random();
             int cols = board.GetLength(0);
             int rows = board.GetLength(1);
             int x = 0, y = 0;
@@ -30,15 +29,7 @@ namespace BatallaNaval.Entities
             // Si aún no le ha pegado a ningun barco
             if (destroyedPartShips.Count == 0)
             {
-                do
-                {
-                    x = r.Next(cols);
-                    y = r.Next(rows);
-                } 
-                while (board[x, y] == 'a' || board[x, y] == 'X');
-                /* Este bucle se asegura de no disparar varias veces en el mismo lugar */
-
-                return new int[] { x, y };
+                return shootRandom(cols, rows, board);
             }
 
             // Si tiene al menos le pegó un disparo a un barco
@@ -46,44 +37,55 @@ namespace BatallaNaval.Entities
             {
                 if (destroyedPartShips.Count > 1) orientFinded = true;
 
-                var ps = destroyedPartShips[destroyedPartShips.Count-1];
-
-                if (!ps.life)
+                var ps = destroyedPartShips[destroyedPartShips.Count - 1];
+                
+                if (!orientFinded && !shootPreviously)
                 {
-                    if (!orientFinded && !shootPreviously)
+                    switchDirection();
+                }
+                else
+                {
+                    if (!shootPreviously)
                     {
+                        /* Volver al primer disparo y continuar por el otro lado */
+                        PartShip p = destroyedPartShips[0];
+                        destroyedPartShips = new List<PartShip>();
+                        destroyedPartShips.Add(p);
+                        ps = destroyedPartShips[0];
+                        sentChanged = false;
                         switchDirection();
                     }
-                    else
-                    {
-                        if (!shootPreviously)
-                        {
-                            /* Volver al primer disparo y continuar por el otro lado */
-                            PartShip p = destroyedPartShips[0];
-                            destroyedPartShips = new List<PartShip>();
-                            destroyedPartShips.Add(p);
-                            ps = p;
-                            switchDirection();
-                        }
-                    }
-
-                    if (lastOrientation)
-                    {
-                        x = ps.x;
-                        if (ps.y + lastSentido < 0 || ps.y + lastSentido > (rows - 1)) switchDirection();
-                        y = ps.y + lastSentido;
-                    }
-                    else
-                    {
-                        if (ps.x + lastSentido < 0 || ps.x + lastSentido > (cols - 1)) switchDirection();
-                        x = ps.x + lastSentido;
-                        y = ps.y;
-                    }
-
-                    shootPreviously = false;
-                    return new int[] { x, y };
                 }
+
+                if (lastOrientation)
+                {
+                    x = ps.x;
+                    y = ps.y + lastSentido;
+                }
+                else
+                {
+                    x = ps.x + lastSentido;
+                    y = ps.y;
+                }
+                if (x < 0 || y < 0 || x > cols - 1 || y > rows - 1) return shootRandom(cols, rows, board);
+                shootPreviously = false;
+                return new int[] { x, y };
             }
+            return new int[] { x, y };
+        }
+        private int[] shootRandom(int cols, int rows, char[,] board)
+        {
+            Random r = new Random();
+            int x;
+            int y;
+            do
+            {
+                x = r.Next(cols);
+                y = r.Next(rows);
+            }
+            while (board[x, y] == 'a' || board[x, y] == 'X');
+            /* Este bucle se asegura de no disparar varias veces en el mismo lugar */
+
             return new int[] { x, y };
         }
         public void switchDirection()
@@ -105,9 +107,14 @@ namespace BatallaNaval.Entities
                 }
             }
         }
-        public void checkDestroyedShip()
+        public bool checkDestroyedShip()
         {
-            if (!shootPreviously && orientFinded) destroyedPartShips = new List<PartShip>();
+            if (!shootPreviously && orientFinded && sentChanged)
+            {
+                reset();
+                return true;
+            }
+            return false;
         }
         public void reset()
         {

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BatallaNaval": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  }
+}
